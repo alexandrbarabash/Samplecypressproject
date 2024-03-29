@@ -1,0 +1,45 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        shell: bash
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          cat .aws/credentials.template | sed "s@%AWS_ACCESS_KEY_ID%@$AWS_ACCESS_KEY_ID@g;s@%AWS_SECRET_ACCESS_KEY%@$AWS_SECRET_ACCESS_KEY@g" > .aws/credentials
+          mkdir ~/.aws && cp -r .aws/credentials ~/.aws
+
+      - name: Install npm packages
+        run: |
+          npm run prepare
+          npm install
+
+      - name: Starting docker compose
+        run: |
+          ./env.sh
+          sleep 5s
+
+      - name: Run cypress tests
+        run: npm run cy:test-manage-login
+
+      - name: Userway Accessability Analysis
+        uses: UserWayOrg/cicd-action@main
+        with:
+          command: analyze
+          verbose: true
+          dry_run: false

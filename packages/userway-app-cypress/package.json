@@ -1,0 +1,13 @@
+{
+  "name": "@userway/app-cypress",
+  "version": "0.0.8",
+  "author": "UserWay Inc. <support@userway.org>",
+  "private": true,
+  "main": "./dist/@userway/app-cypress.js",
+  "module": "./dist/@userway/app-cypress.mjs",
+  "types": "./dist/@userway/app-cypress.d.ts",
+  "files": [
+    "dist/**/*",
+    "package.json"
+  ]
+}

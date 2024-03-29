@@ -1,0 +1,54 @@
+image: userway/base-node-16-python3-aws-docker-compose:0.0.4
+
+options:
+  docker: true
+  max-time: 10
+
+definitions:
+  services:
+    docker:
+      memory: 2048
+
+  steps:
+    - step: &cypress-test #        image: cypress/browsers:node18.12.0-chrome107
+        image: userway/base-node-18-chrome-cypress:0.0.4
+        services:
+          - docker
+        caches:
+          - docker
+        #          - node
+        size: 2x
+        name: Run cypress tests on local website (Chrome)
+        script:
+          # Prepare AWS credentials
+          - cat .aws/credentials.template | sed "s@%AWS_ACCESS_KEY_ID%@$AWS_ACCESS_KEY_ID@g;s@%AWS_SECRET_ACCESS_KEY%@$AWS_SECRET_ACCESS_KEY@g" > .aws/credentials
+          - mkdir ~/.aws && cp -r .aws/credentials ~/.aws
+
+          # Install dependencies
+          - npm run prepare
+          - npm install
+
+          # Starting docker compose
+          - ./env.sh
+          - sleep 5s
+
+          # Run cypress tests
+          - npm run cy:test-manage-login
+
+          # UserWay Accessibility Analyze
+          - npx userway analyze --dry-run
+          - npx userway analyze --verbose --concurrency=100
+
+        artifacts:
+          # store any generates images and videos
+          - uw-a11y-reports/**
+          - uw-a11y-reports/pages/**
+          - uw-a11y-reports/reports/**
+          - uw-a11y-reports/screenshots/**
+
+pipelines:
+  default:
+    - step: *cypress-test
+  pull-requests:
+    "**":
+      - step: *cypress-test

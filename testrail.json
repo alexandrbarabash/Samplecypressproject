@@ -1,0 +1,9 @@
+{
+  "testrail": {
+    "domain": "userway.testrail.io",
+    "username": "CYPRESS_TESTRAIL_USERNAME",
+    "password": "CYPRESS_TESTRAIL_PASSWORD",
+    "screenshots": true,
+    "projectId": 6
+  }
+}

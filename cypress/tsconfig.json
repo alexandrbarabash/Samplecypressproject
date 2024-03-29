@@ -1,0 +1,9 @@
+{
+  "include": ["**/*.js", "**/*.ts"],
+  "compilerOptions": {
+    "baseUrl": "http://127.0.0.1:8091",
+    "allowJs": true,
+    "target": "ES5",
+    "types": ["cypress", "cypress-localstorage-commands", "cypress-real-events", "@userway/app-cypress"]
+  }
+}

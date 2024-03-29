@@ -1,0 +1,2 @@
+npmRegistryServerConfig:
+  awsProfile: userway-codeartifact-profile
