@@ -1,8 +1,8 @@
 import type { Config } from '@userway/a11y-kit';
 
 export default {
-  token: '7ax2qg0qce9bm0frq5bwo1auqovs3tq0c6l0xleh',
+  token: 'xq3a4kkx4tshcgtpxw6xaqvheytskmlgqpwvb782',
   organization: 'alexander-barabash-userway-org-tfdls',
-  project: 'test',
+  project: 'sample-cypress-project',
   timeout: 100_000_000,
 } satisfies Config;
